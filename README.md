@@ -16,7 +16,7 @@ This project can be used to transform GeoJSON files into ArcGIS Feature Services
 
 # When to use it
 
-When you are using the [ArcGIS Web Map Viewers](https://www.arcgis.com/home/webmap/viewer.html) it allows you to "Add Layer from Web" of types: WMS, WMTS, WFS, Tile layers, KML files, GeoRSS files, CSV and Bing Maps, but it still doesn't support to load GeoJSON directly in a [Web Map](https://developers.arcgis.com/web-map-specification/) without hosting and transforming it on ArcGIS. So this way you can reference and load a GeoJSON hosted and maintained by a third party into a Web Map.
+When you are using the [ArcGIS Web Map Viewer](https://www.arcgis.com/home/webmap/viewer.html) it allows you to "Add Layer from Web" of types: WMS, WMTS, WFS, Tile layers, KML files, GeoRSS files, CSV and Bing Maps, but it still doesn't support to load GeoJSON directly in a [Web Map](https://developers.arcgis.com/web-map-specification/) without hosting and transforming it on ArcGIS. So this way you can reference and load a GeoJSON hosted and maintained by a third party into a Web Map.
 
 > Note: we are aware that the JavaScript 4.x already support [GeoJSON layers](https://developers.arcgis.com/javascript/latest/api-reference/esri-layers-GeoJSONLayer.html), but this is not the same use case.
 
