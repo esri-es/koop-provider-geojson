@@ -10,11 +10,7 @@ This project can be used to transform GeoJSON files into ArcGIS Feature Services
 
 1. You need a geojson dataset accesible though a public URL, for example: [the City Shops](http://esri-es.github.io/geojson2fs-service/data/City_Shops_Villa_nueva_de_la_serena.geojson)
 
-2. Then, you need to do a Base64 encode of the URL
-
-   2.1. With JavaScript it can be done using the [btoa function](https://developer.mozilla.org/en-US/docs/Web/API/WindowBase64/Base64_encoding_and_decoding).
-   
-   2.2. You can also use online free encoders like [base64encode.net](https://www.base64encode.net/)
+2. Then, you need to do a Base64 encode of the URL and replace any remaining character '/' for '_'. With JavaScript it can be done using the [btoa function](https://developer.mozilla.org/en-US/docs/Web/API/WindowBase64/Base64_encoding_and_decoding) ([check this JS snippet](#snippet-js-to-encode-the-url)).
 
 3. Then you just need to replace the result of the encoding here: `https://esri-es-etl-crgjcqnzug.now.sh/geojson2fs/<ENCODED_URL>/FeatureServer/0`
 
@@ -25,6 +21,31 @@ This project can be used to transform GeoJSON files into ArcGIS Feature Services
 "Add Layer from Web" allow you to reference and load layers of types: WMS, WMTS, WFS, Tile layers, KML files, GeoRSS files, CSV and Bing Maps, but it still doesn't support to load GeoJSON directly inside a [Web Map](https://developers.arcgis.com/web-map-specification/) without hosting and transforming it on ArcGIS. So this way you can do it.
 
 > **Note**: we are aware that the JavaScript 4.x already support [GeoJSON layers](https://developers.arcgis.com/javascript/latest/api-reference/esri-layers-GeoJSONLayer.html), but this is not the same use case because we are trying to load the data **on a Web Map**.
+
+## Snippet JS to encode the URL
+
+You can run this within the JS console to 
+
+```js
+// Change set a value for `targetUrl` or leave it blank to use location.href
+let targetUrl = ''; 
+
+String.prototype.replaceAll = function(search, replacement) {
+    var target = this;
+    return target.replace(new RegExp(search, 'g'), replacement);
+};
+
+(function(targetUrl){
+    url = targetUrl? targetUrl: location.href;
+    url = btoa(url)
+    path = `${url.replaceAll('/','_')}/FeatureServer/0`
+
+    console.log(`https://esri-es-etl-crgjcqnzug.now.sh/geojson2fs/${path}`)
+    console.log(`http://localhost:8080/geojson2fs/${path}`)
+})(targetUrl)
+
+
+```
 
 # Contributions
 
