@@ -9,20 +9,26 @@ This project can be used to transform GeoJSON files into ArcGIS Feature Services
 # How does it works?
 
 1. You need a geojson dataset accesible though a public URL, for example: [the City Shops](http://esri-es.github.io/geojson2fs-service/data/City_Shops_Villa_nueva_de_la_serena.geojson)
+
 2. Then, you need to do a Base64 encode of the URL
-2.1. With JavaScript can be done with the [btoa](https://developer.mozilla.org/en-US/docs/Web/API/WindowBase64/Base64_encoding_and_decoding) function
-2.2. You can also use online free encoders like [base64encode.net](https://www.base64encode.net/)
+
+   2.1. With JavaScript it can be done using the [btoa function](https://developer.mozilla.org/en-US/docs/Web/API/WindowBase64/Base64_encoding_and_decoding).
+   
+   2.2. You can also use online free encoders like [base64encode.net](https://www.base64encode.net/)
+
 3. Then you just need to replace the result of the encoding here: `https://esri-es-etl-crgjcqnzug.now.sh/geojson2fs/<ENCODED_URL>/FeatureServer/0`
 
-# When to use it
+4. Now you are ready to load it using the [ArcGIS Web Map Viewer](https://www.arcgis.com/home/webmap/viewer.html) it allows you to "[Add Layer from Web](https://doc.arcgis.com/en/arcgis-online/create-maps/add-layers.htm)"
 
-When you are using the [ArcGIS Web Map Viewer](https://www.arcgis.com/home/webmap/viewer.html) it allows you to "Add Layer from Web" of types: WMS, WMTS, WFS, Tile layers, KML files, GeoRSS files, CSV and Bing Maps, but it still doesn't support to load GeoJSON directly in a [Web Map](https://developers.arcgis.com/web-map-specification/) without hosting and transforming it on ArcGIS. So this way you can reference and load a GeoJSON hosted and maintained by a third party into a Web Map.
+# Why did we did this?
 
-> Note: we are aware that the JavaScript 4.x already support [GeoJSON layers](https://developers.arcgis.com/javascript/latest/api-reference/esri-layers-GeoJSONLayer.html), but this is not the same use case.
+"Add Layer from Web" allow you to reference and load layers of types: WMS, WMTS, WFS, Tile layers, KML files, GeoRSS files, CSV and Bing Maps, but it still doesn't support to load GeoJSON directly inside a [Web Map](https://developers.arcgis.com/web-map-specification/) without hosting and transforming it on ArcGIS. So this way you can do it.
+
+> **Note**: we are aware that the JavaScript 4.x already support [GeoJSON layers](https://developers.arcgis.com/javascript/latest/api-reference/esri-layers-GeoJSONLayer.html), but this is not the same use case because we are trying to load the data **on a Web Map**.
 
 # Contributions
 
-This is only a sketch
+This is only a sketch of how to solve this issue, we would love to improve this project adding support to other formats like Shapefiles, so any issues and pull requests are more than welcome.
 
 # Credits
 Original code base on the [koop-provider-sample](https://github.com/koopjs/koop-provider-sample)
