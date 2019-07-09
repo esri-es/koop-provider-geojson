@@ -1,7 +1,7 @@
 {
-  "name": "koop-provider-sample",
+  "name": "esri-es-etl",
   "version": "1.0.0",
-  "description": "A sample provider for koop",
+  "description": "Koop provider to transform GeoJSON to ArcGIS Feature Service on the fly",
   "main": "index.js",
   "directories": {
     "test": "test"
@@ -13,11 +13,12 @@
     "lambda-update": "claudia update"
   },
   "dependencies": {
+    "atob": "^2.1.2",
     "config": "^3.0.0",
     "koop": "^3.10.1",
     "request": "^2.79.0"
   },
-  "author": "Daniel Fenton",
+  "author": "Daniel Fenton + Raul Jimenez <raul.jimenez@esri.es>",
   "license": "Apache-2.0",
   "devDependencies": {
     "nock": "^10.0.0",

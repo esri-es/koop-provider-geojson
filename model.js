@@ -21,15 +21,21 @@ function Model (koop) {}
 // req.params.id  (if index.js:disableIdParam false)
 // req.params.layer
 // req.params.method
+
+var atob = require('atob');
+  var b64 = "SGVsbG8sIFdvcmxkIQ==";
+  var bin = atob(b64);
+
 Model.prototype.getData = function (req, callback) {
-  const key = config.trimet.key
+
 
   // Call the remote API with our developer key
-  request(`https://developer.trimet.org/ws/v2/vehicles/onRouteOnly/false/appid/${key}`, (err, res, body) => {
+  request(`${atob(req.params.id)}`, (err, res, body) => {
     if (err) return callback(err)
 
     // translate the response into geojson
-    const geojson = translate(body)
+    //const geojson = translate(body)
+    const geojson = body
 
     // Optional: cache data for 10 seconds at a time by setting the ttl or "Time to Live"
     // geojson.ttl = 10

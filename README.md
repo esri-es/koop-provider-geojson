@@ -1,77 +1,28 @@
-[![Build Status](https://travis-ci.org/koopjs/koop-provider-sample.svg?branch=master)](https://travis-ci.org/koopjs/koop-provider-sample) [![Greenkeeper badge](https://badges.greenkeeper.io/koopjs/koop-provider-sample.svg)](https://greenkeeper.io/)
+# geojson2fs-service
 
+This project can be used to transform GeoJSON files into ArcGIS Feature Services on the fly.
 
-# Koop Sample Provider
+[Live demo](http://www.arcgis.com/home/webmap/viewer.html?source=sd&panel=gallery&suggestField=true&url=https://esri-es-etl-crgjcqnzug.now.sh/geojson2fs/aHR0cDovL2dlb3NlcnZlci52aWxsYW51ZXZhZGVsYXNlcmVuYS5lcy9nZW9zZXJ2ZXIvd2ZzL293cz9zZXJ2aWNlPVdGUyZ2ZXJzaW9uPTEuMC4wJnJlcXVlc3Q9R2V0RmVhdHVyZSZ0eXBlTmFtZT1MRzNfV1NfTWFwUHVibGlzaF9wdWJsaWMlM0F2dmFfY29tZXJjaW9fY29tZXJjaW9zXzEwNSZzcnNOYW1lPUVQU0clM0E0MjU4Jm91dHB1dEZvcm1hdD1hcHBsaWNhdGlvbiUyRmpzb24=/FeatureServer/0) with a dataset of [City Shops](http://geoserver.villanuevadelaserena.es/geoserver/wfs/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=LG3_WS_MapPublish_public%3Avva_comercio_comercios_105&srsName=EPSG%3A4258&outputFormat=application%2Fjson) from [opendata.villanuevadelaserena.es](http://opendata.villanuevadelaserena.es/).
 
-This is a sample that demonstrates how to build a Koop Provider. You can clone this project, and use it to start a new provider. This sample can run a local server, deploy to AWS Lambda or Docker for testing and operations. Once the provider is published to NPM, then it can be used with other Koop providers and outputs in a larger project.
+> Note in case it doesn't work try with [this local copy](./data/City_Shops_Villa_nueva_de_la_serena.geojson): [live demo](http://www.arcgis.com/home/webmap/viewer.html?source=sd&panel=gallery&suggestField=true&url=https://esri-es-etl-crgjcqnzug.now.sh/geojson2fs/aHR0cDovL2VzcmktZXMuZ2l0aHViLmlvL2dlb2pzb24yZnMtc2VydmljZS9kYXRhL0NpdHlfU2hvcHNfVmlsbGFfbnVldmFfZGVfbGFfc2VyZW5hLmdlb2pzb24=/FeatureServer/0) using a copy of the dataset
 
+# How does it works?
 
-The data source in this example is the [TriMet Bus API](https://developer.trimet.org). You can see this provider in action [here](http://dcdev.maps.arcgis.com/home/item.html?id=2603e7e3f10742f78093edf8ea2adfd8#visualize).
+1. You need a geojson dataset accesible though a public URL, for example: [the City Shops](http://esri-es.github.io/geojson2fs-service/data/City_Shops_Villa_nueva_de_la_serena.geojson)
+2. Then, you need to do a Base64 encode of the URL
+2.1. With JavaScript can be done with the [btoa](https://developer.mozilla.org/en-US/docs/Web/API/WindowBase64/Base64_encoding_and_decoding) function
+2.2. You can also use online free encoders like [base64encode.net](https://www.base64encode.net/)
+3. Then you just need to replace the result of the encoding here: `https://esri-es-etl-crgjcqnzug.now.sh/geojson2fs/<ENCODED_URL>/FeatureServer/0`
 
-Full documentation is provided [here](https://koopjs.github.io/docs/usage/provider).
+# When to use it
 
-## Getting started
+When you are using the [ArcGIS Web Map Viewers](https://www.arcgis.com/home/webmap/viewer.html) it allows you to "Add Layer from Web" of types: WMS, WMTS, WFS, Tile layers, KML files, GeoRSS files, CSV and Bing Maps, but it still doesn't support to load GeoJSON directly in a [Web Map](https://developers.arcgis.com/web-map-specification/) without hosting and transforming it on ArcGIS. So this way you can reference and load a GeoJSON hosted and maintained by a third party into a Web Map.
 
-1. Open `index.js` and change `provider.name` to a unique name
-1. Open `config/default.json` with any configurable parameters
-1. Open `model.js` and implement `getData` to call your provider and return GeoJSON
-1. Install dependencies `npm install`
-1. Run a local server `npm start`
-1. Add tests to `test/`
+> Note: we are aware that the JavaScript 4.x already support [GeoJSON layers](https://developers.arcgis.com/javascript/latest/api-reference/esri-layers-GeoJSONLayer.html), but this is not the same use case.
 
-## Koop provider file structure
+# Contributions
 
-| File | | Description |
-| --- | --- | --- |
-| `index.js` | Mandatory | Configures provider for usage by Koop |
-| `model.js` | Mandatory | Translates remote API to GeoJSON |
-| `routes.js` | Optional | Specifies additional routes to be handled by this provider |
-| `controller.js` | Optional | Handles additional routes specified in `routes.js` |
-| `server.js` | Optional | Reference implementation for the provider |
-| `test/model-test.js` | Optional | tests the `getData` function on the model |
-| `test/fixtures/input.json` | Optional | a sample of the raw input from the 3rd party API |
-| `config/default.json` | Optional | used for advanced configuration, usually API keys. |
+This is only a sketch
 
-
-## Test it out
-Run server:
-- `npm install`
-- `npm start`
-
-Example API Query:
-- `curl localhost:8080/sample/FeatureServer/0/query?returnCountOnly=true`
-
-Tests:
-- `npm test`
-
-### Development output callstack logs
-
-During development you can output error callstack with
-
-- `NODE_ENV=test npm start`
-
-
-## Deploy to AWS Lambda
-
-Koop providers can be quickly deployed and scaled with AWS Lambda. To first create the service:
-
-- `npm run lambda-create`
-
-To deploy code updates
-
-- `npm run lambda-update`
-
-### AWS Lambda configuration
-
-By default, AWS Lambda has a 3 second timeout and only 128MB memory. If your Koop provider uses a slower service, then you should change the AWS Lambda timeout to a higher time limit (e.g. 60 seconds) as well as add more memory (e.g. 512MB).
-
-## With Docker
-
-- `docker build -t koop-provider-sample .`
-- `docker run -it -p 8080:8080 koop-provider-sample`
-
-## Publish to npm
-
-- run `npm init` and update the fields
-  - Choose a name like `koop-provider-foo`
-- run `npm publish`
+# Credits
+Original code base on the [koop-provider-sample](https://github.com/koopjs/koop-provider-sample)
