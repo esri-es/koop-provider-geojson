@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Base64 encoder</title>
+    <meta name="description" content="This is an example of a meta description.">
+
+    <link rel="stylesheet" href="https://s3-us-west-1.amazonaws.com/patterns.esri.com/files/calcite-web/1.2.5/css/calcite-web.min.css">
+    <script src="https://s3-us-west-1.amazonaws.com/patterns.esri.com/files/calcite-web/1.2.5/js/calcite-web.min.js"></script>
+    <style>
+        textarea{
+            height: 200px
+        }
+    </style>
+    <script
+    src="https://code.jquery.com/jquery-3.4.1.min.js"
+    integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+    crossorigin="anonymous"></script>
+
+    <!--[if lt IE 9]>
+    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+</head>
+<body>
+    <header class="top-nav fade-in">
+    <div class="grid-container leader-1">
+      <div class="column-24">
+          <h1>Base64 URL Encoder</h1>
+      </div>
+      </div>
+    <div class="grid-container">
+	<div class="column-24">
+    <form action="#">
+        <div>
+            <label for="source">GeoJSON URL:
+                <input type="text" id="source" name="source" value="http://esri-es.github.io/koop-provider-geojson/data/City_Shops_Villa_nueva_de_la_serena.geojson">
+            </label>
+        </div>
+        <div class="leader-2">
+            <label for="target">Koop provider encoded URL (check the <a href="https://github.com/esri-es/koop-provider-geojson#snippet-js-to-encode-the-url">encoding script</a>):
+            <textarea id="target" name="target"></textarea>
+            </label>
+        </div>
+        <p id="preview" class="hide">
+            Preview :
+            <a href="#" id="nowsh">raw in now.sh</a> |
+            <a href="#" id="webmapViewer">inside webmap viewer through now.sh</a> |
+            <a href="#" id="localhost">raw encodedurl</a>
+        </p>
+        <input type="submit" name="Submit" value="Submit" class="btn btn-primary btn-fill">
+    </form>
+</div>
+</div>
+    <script>
+        // Change set a value for `targetUrl` or leave it blank to use location.href
+        String.prototype.replaceAll = function(search, replacement) {
+            var target = this;
+            return target.replace(new RegExp(search, 'g'), replacement);
+        };
+
+        let webmapViewer = 'http://www.arcgis.com/home/webmap/viewer.html?source=sd&panel=gallery&suggestField=true&url='
+
+        function getEncodedUrl(targetUrl){
+            let url = btoa(targetUrl);
+            let path = `${url.replaceAll('/','_')}/FeatureServer/0`
+            let output = '';
+            let nowsh = `https://esri-es-etl-crgjcqnzug.now.sh/geojson2fs/${path}`;
+            $('#nowsh').attr('href', nowsh);
+            $('#webmapViewer').attr('href', `${webmapViewer}${nowsh}`);
+
+            let localhost = `http://localhost:8080/geojson2fs/${path}`;
+            $('#localhost').attr('href', localhost);
+            $("#preview").removeClass("hide")
+            output += nowsh + '\n\n' + localhost;
+            return output;
+        }
+
+        $(function() {
+
+            $("form").submit(e => {
+                e.preventDefault();
+                $('#target').val(getEncodedUrl($('#source').val()));
+                return false;
+            });
+        });
+    </script>
+
+</body>
+</html>
