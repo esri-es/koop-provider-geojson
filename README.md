@@ -1,4 +1,4 @@
-# geojson2fs-service
+# koop-provider-geojson
 
 This project can be used to transform GeoJSON files into ArcGIS Feature Services on the fly.
 
