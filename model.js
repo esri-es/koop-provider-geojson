@@ -23,12 +23,18 @@ function Model (koop) {}
 // req.params.method
 
 var atob = require('atob');
-  var b64 = "SGVsbG8sIFdvcmxkIQ==";
-  var bin = atob(b64);
+var b64 = "SGVsbG8sIFdvcmxkIQ==";
+var bin = atob(b64);
+
+String.prototype.replaceAll = function(search, replacement) {
+    var target = this;
+    return target.replace(new RegExp(search, 'g'), replacement);
+};
 
 Model.prototype.getData = function (req, callback) {
 
-
+  let url = atob(req.params.id);
+  url = url.replaceAll('_', '/');
   // Call the remote API with our developer key
   request(`${atob(req.params.id)}`, (err, res, body) => {
     if (err) return callback(err)
